@@ -171,11 +171,57 @@ var STYLES = [
   { id: "farmhouse", label: "Moderný vidiecky", sublabel: "Farmhouse", emoji: "🏡", prompt: "modern farmhouse shiplap walls rustic wood beams cozy" }
 ];
 
-// Pollinations text API - zadarmo, bez kľúča
-function callTextAI(prompt) {
-  return fetch("https://text.pollinations.ai/" + encodeURIComponent(prompt))
-    .then(function(r) { return r.text(); });
-}
+// Predpísané odpovede v správnej slovenčine
+var RESPONSES = {
+  "farb": {
+    reply: "Skvelý nápad! Zmena farby stien dokáže úplne premeniť atmosféru miestnosti. Pre tento štýl by sa hodili teplé zemité tóny alebo jemné pastelové odtiene. Generujem novú vizualizáciu.",
+    keywords: "colorful painted walls warm tones"
+  },
+  "stien": {
+    reply: "Steny sú základ každého interiéru. Odporúčam zvážiť akcentovú stenu v kontrastnej farbe alebo zaujímavú textúru, napríklad tehlu či drevený obklad. Pozri sa na novú vizualizáciu.",
+    keywords: "accent wall new color texture"
+  },
+  "rastlin": {
+    reply: "Rastliny dodajú každému priestoru život a sviežosť. Odporúčam kombináciu väčšej podlahovej rastliny (napr. fikus alebo monstera) s menšími na poličkách. Aktualizujem vizualizáciu.",
+    keywords: "indoor plants greenery monstera ficus"
+  },
+  "nabyt": {
+    reply: "Modernejší nábytok môže výrazne osviežiť celý priestor. Kľúčové je zvoliť kusy, ktoré spolu ladia materiálom aj farbou. Pripravujem novú vizualizáciu s aktualizovaným nábytkom.",
+    keywords: "modern furniture new sleek design"
+  },
+  "nakup": {
+    reply: "Pre nákup nábytku a doplnkov v tomto štýle odporúčam: IKEA (dostupné základy), JYSK (dobrý pomer cena/kvalita), Möbelix (široký výber), Bonami.sk (dizajnové kúsky) a Westwing (prémiové dekorácie). Pre menšie doplnky sú výborné H&M Home a Zara Home.",
+    keywords: ""
+  },
+  "tip": {
+    reply: "Tu sú moje tipy: 1) Začnite s farbou stien — je to najlacnejšia a najväčšia zmena. 2) Investujte do kvalitného osvetlenia — stojanova lampa dokáže zázraky. 3) Pridajte textílie — vankúše, deka a koberec zjemnia priestor. 4) Menej je viac — zbavte sa zbytočností.",
+    keywords: ""
+  },
+  "svetl": {
+    reply: "Osvetlenie je kľúčové pre atmosféru. Odporúčam kombinovať viacero zdrojov svetla: stropné pre celkové osvetlenie, stojanové alebo stolové lampy pre útulnosť a LED pásiky pre moderný akcent.",
+    keywords: "bright warm lighting lamps cozy"
+  },
+  "tmav": {
+    reply: "Tmavšie tóny dodajú priestoru hĺbku a eleganciu. Skúste tmavú akcentovú stenu v kombinácii s medenými alebo zlatými doplnkami. Dôležité je zachovať dostatok svetla, aby priestor nepôsobil stiesneným dojmom.",
+    keywords: "dark moody elegant atmosphere dramatic"
+  },
+  "drev": {
+    reply: "Drevo vnáša do interiéru teplo a prirodzenosť. Krásne funguje ako drevená podlaha, police alebo jedálenský stôl. Kombinujte svetlé a tmavé odtiene dreva pre zaujímavý kontrast.",
+    keywords: "wooden accents natural wood warm"
+  },
+  "kober": {
+    reply: "Koberec je jednoduchý spôsob, ako definovať zóny v miestnosti a pridať útulnosť. Pre tento štýl odporúčam koberec s jemným vzorom alebo v jednofarebnom prevedení, ktorý ladí s ostatnými textíliami.",
+    keywords: "area rug carpet cozy floor textile"
+  },
+  "polick": {
+    reply: "Otvorené poličky sú skvelé na vystavenie dekorácií a osobných predmetov. Platí pravidlo: kombinujte knihy, rastliny a dekorácie v nepárnych počtoch. Neplňte ich úplne — nechajte priestor dýchať.",
+    keywords: "open shelves books decoration display"
+  },
+  "default": {
+    reply: "Dobrý nápad! Skúsim upraviť vizualizáciu podľa tvojej požiadavky. Ak chceš konkrétnejšie zmeny, skús napísať napríklad „zmeň farbu stien", „pridaj rastliny" alebo „modernejší nábytok".",
+    keywords: "improved redesigned beautiful modern"
+  }
+};
 
 // Init style buttons
 var grid = document.getElementById("stylesGrid");
@@ -231,36 +277,52 @@ function generateVisualization(styleObj, extra) {
   document.getElementById("vizAfterLabel").textContent = "Po — " + styleObj.label;
   showSpinner("Generujem dizajn... (15-30s)");
 
-  var prompt = styleObj.prompt + " interior design photorealistic 8k beautiful";
+  var prompt = styleObj.prompt + " interior design photorealistic 8k";
   if (extra) prompt += " " + extra;
   loadImage(prompt, styleObj);
 }
 
 function loadImage(prompt, styleObj) {
   var seed = Math.floor(Math.random() * 100000);
-  var url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.substring(0, 150)) + "?width=800&height=600&seed=" + seed + "&nologo=true";
+  var clean = prompt.substring(0, 150);
+  var url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(clean) + "?width=800&height=600&seed=" + seed + "&nologo=true";
 
+  console.log("Loading:", url);
+
+  // Priamo nastavíme src na vizAfter element
   var vizAfter = document.getElementById("vizAfter");
-  vizAfter.style.display = "none";
 
-  // Jednoduchý img load - BEZ crossOrigin, BEZ fetch
-  var img = document.createElement("img");
-  img.onload = function() {
-    vizAfter.src = url;
+  // Najprv nastavíme event handlery
+  vizAfter.onload = function() {
+    console.log("Image loaded OK");
     vizAfter.style.display = "block";
     document.getElementById("genSpinner").style.display = "none";
+    vizAfter.onload = null;
+    vizAfter.onerror = null;
     if (chatHistory.length === 0 && styleObj) {
       addMsg("assistant", "Ahoj! Tvoja miestnosť bola prerobená v štýle \"" + styleObj.label + "\". Môžeš ma požiadať o zmenu farieb, pridanie nábytku alebo tipy na nákup.");
     }
   };
-  img.onerror = function() {
-    // Retry s ešte jednoduchším promptom
-    var simple = "https://image.pollinations.ai/prompt/" + encodeURIComponent("beautiful " + (styleObj ? styleObj.id : "modern") + " interior room design") + "?width=800&height=600&seed=" + (seed+1) + "&nologo=true";
-    vizAfter.src = simple;
-    vizAfter.style.display = "block";
-    document.getElementById("genSpinner").style.display = "none";
+  vizAfter.onerror = function() {
+    console.log("Image error, trying fallback");
+    vizAfter.onload = function() {
+      vizAfter.style.display = "block";
+      document.getElementById("genSpinner").style.display = "none";
+      vizAfter.onload = null;
+      vizAfter.onerror = null;
+    };
+    vizAfter.onerror = function() {
+      document.getElementById("genSpinner").style.display = "none";
+      vizAfter.onload = null;
+      vizAfter.onerror = null;
+    };
+    var seed2 = Math.floor(Math.random() * 100000);
+    vizAfter.src = "https://image.pollinations.ai/prompt/" + encodeURIComponent("beautiful " + (styleObj ? styleObj.id : "modern") + " interior room") + "?width=800&height=600&seed=" + seed2 + "&nologo=true";
   };
-  img.src = url;
+
+  // Potom nastavíme src - to spustí loading
+  vizAfter.style.display = "none";
+  vizAfter.src = url;
 }
 
 function showSpinner(text) {
@@ -283,16 +345,6 @@ function addMsg(role, text) {
 
 function escapeHtml(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
-function removeLastLoading() {
-  var c = document.getElementById("chatMessages");
-  var m = c.querySelectorAll(".msg");
-  for (var i = m.length - 1; i >= 0; i--) {
-    if (m[i].querySelector(".bubble").textContent.indexOf("⏳") === 0) {
-      c.removeChild(m[i]); chatHistory.pop(); break;
-    }
-  }
-}
-
 function setQuick(t) { document.getElementById("chatInput").value = t; updateSendBtn(); }
 function updateSendBtn() {
   var b = document.getElementById("sendBtn");
@@ -305,43 +357,33 @@ function sendChat() {
   if (!msg) return;
   addMsg("user", msg);
   input.value = ""; updateSendBtn();
-  addMsg("assistant", "⏳ Spracovávam...");
 
-  var aiPrompt = "Si AI konzultant interieroveho dizajnu. Styl: " + (selectedStyle ? selectedStyle.label : "moderny") + ". Otazka: " + msg + ". Odpovedaj v slovencine, strucne 2-3 vety. Na konci pridaj KEYWORDS: anglicke klucove slova pre obrazok (max 5 slov)";
+  // Nájdi najlepšiu odpoveď podľa kľúčových slov
+  var lower = msg.toLowerCase();
+  var matched = null;
 
-  callTextAI(aiPrompt)
-    .then(function(resp) {
-      removeLastLoading();
-      var parts = resp.split("KEYWORDS:");
-      var answer = parts[0].trim();
-      var keywords = parts[1] ? parts[1].trim().substring(0, 50) : "";
-      if (!answer || answer.length < 3) answer = "Upravujem dizajn podľa tvojej požiadavky.";
-      addMsg("assistant", answer);
-      if (keywords && selectedStyle) {
-        showSpinner("Aktualizujem dizajn...");
-        loadImage(selectedStyle.prompt + " " + keywords + " interior photorealistic", null);
-      }
-    })
-    .catch(function() {
-      removeLastLoading();
-      // Offline fallback
-      var kw = { "farb":"colorful walls painted", "stien":"new wall color bright", "rastlin":"indoor plants greenery", "nabyt":"modern furniture", "svetl":"bright warm lighting", "tmav":"dark moody atmosphere", "drev":"wooden accents natural" };
-      var keywords = "", reply = "Skúsim upraviť dizajn podľa tvojej požiadavky.";
-      var lower = msg.toLowerCase();
+  var keys = Object.keys(RESPONSES);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    if (key !== "default" && lower.indexOf(key) !== -1) {
+      matched = RESPONSES[key];
+      break;
+    }
+  }
 
-      if (lower.indexOf("nakup") !== -1 || lower.indexOf("tip") !== -1) {
-        addMsg("assistant", "Pre nákup nábytku odporúčam: IKEA, JYSK, Möbelix, Bonami.sk. Pre dekorácie: H&M Home, Westwing, Pepco.");
-        return;
-      }
-      Object.keys(kw).forEach(function(k) { if (lower.indexOf(k) !== -1) keywords = kw[k]; });
-      addMsg("assistant", reply);
-      if (keywords && selectedStyle) {
-        showSpinner("Aktualizujem dizajn...");
-        loadImage(selectedStyle.prompt + " " + keywords + " interior photorealistic", null);
-      }
-    });
+  if (!matched) matched = RESPONSES["default"];
+
+  addMsg("assistant", matched.reply);
+
+  // Ak sú kľúčové slová, pregeneruj obrázok
+  if (matched.keywords && selectedStyle) {
+    showSpinner("Aktualizujem dizajn...");
+    var prompt = selectedStyle.prompt + " " + matched.keywords + " interior photorealistic";
+    loadImage(prompt, null);
+  }
 }
 
+// Navigation
 function goToStep(s) {
   currentStep = s;
   document.getElementById("resetBtn").style.display = s > 1 ? "block" : "none";
@@ -358,6 +400,8 @@ function resetAll() {
   document.getElementById("check1").style.display = "none";
   document.getElementById("chatMessages").innerHTML = "";
   document.getElementById("chatInput").value = "";
+  document.getElementById("vizAfter").onload = null;
+  document.getElementById("vizAfter").onerror = null;
   document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("selected"); });
   hideError(); goToStep(1);
 }
