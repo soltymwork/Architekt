@@ -18,67 +18,49 @@
     input::placeholder { color: #aaa; }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
-
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
     .header { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
     .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #2d8a6e, #4eba8b); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 8px rgba(45,138,110,0.3); }
     .logo-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #1a2e28; letter-spacing: -0.3px; }
     .logo-sub { font-size: 10px; color: #6b8a7e; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
     .reset-btn { background: rgba(45,138,110,0.08); border: 1px solid rgba(45,138,110,0.15); border-radius: 10px; padding: 7px 14px; font-size: 12px; font-weight: 600; color: #2d8a6e; display: none; }
-
     .progress { padding: 16px 20px 0; display: flex; gap: 6px; }
     .progress-bar { flex: 1; height: 3px; border-radius: 2px; background: rgba(0,0,0,0.08); transition: all 0.5s ease; }
     .progress-bar.active { background: linear-gradient(90deg, #2d8a6e, #4eba8b); }
-
     .container { max-width: 680px; margin: 0 auto; padding: 16px 14px 40px; }
-
     .card { background: white; border-radius: 20px; padding: 24px 20px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); }
     .card.animated { animation: fadeUp 0.5s ease; }
-
     .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
     .step-badge { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: white; font-weight: 700; flex-shrink: 0; background: linear-gradient(135deg, #2d8a6e, #4eba8b); }
     .step-title { font-size: 16px; font-weight: 600; color: #1a2e28; }
     .step-check { font-size: 16px; color: #2d8a6e; display: none; }
-
     .upload-zone { border: 2px dashed rgba(0,0,0,0.12); border-radius: 16px; padding: 44px 20px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.01); transition: all 0.3s; }
     .upload-zone:hover, .upload-zone.dragover { border-color: #2d8a6e; background: rgba(45,138,110,0.04); }
     .upload-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
     .upload-text { font-size: 14px; font-weight: 500; color: #444; margin-bottom: 4px; }
     .upload-hint { font-size: 11px; color: #999; }
-
     .preview-wrap { position: relative; border-radius: 16px; overflow: hidden; display: none; }
     .preview-wrap img { width: 100%; max-height: 260px; object-fit: cover; display: block; border-radius: 16px; }
-    .preview-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 10px; border-radius: 16px; }
-    .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #4eba8b; border-radius: 50%; animation: spin 0.8s linear infinite; }
-    .spinner-label { color: white; font-size: 13px; font-weight: 500; }
     .remove-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 15px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
     .error-msg { color: #d32f2f; font-size: 12px; margin-top: 10px; text-align: center; display: none; }
-
     #step2, #step3-viz, #step3-chat { display: none; }
-
-    .room-desc { background: rgba(45,138,110,0.05); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #4a6b5e; line-height: 1.5; border-left: 3px solid #4eba8b; display: none; }
-
     .styles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .style-btn { background: rgba(0,0,0,0.015); border: 2px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 18px 10px; text-align: center; transition: all 0.25s ease; }
     .style-btn.selected { background: linear-gradient(135deg, rgba(45,138,110,0.08), rgba(78,186,139,0.08)); border-color: #2d8a6e; transform: scale(0.97); }
-    .style-btn.disabled { opacity: 0.5; pointer-events: none; }
     .style-emoji { font-size: 26px; margin-bottom: 6px; }
     .style-name { font-size: 13px; font-weight: 600; color: #1a2e28; }
     .style-sub { font-size: 10px; color: #999; margin-top: 2px; }
-
     .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .viz-label { font-size: 10px; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
     .viz-label.before { color: #999; }
     .viz-label.after { color: #2d8a6e; }
     .viz-frame { border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; background: #f5f5f5; display: flex; align-items: center; justify-content: center; }
     .viz-frame.after-frame { background: #f0f7f4; }
-    .viz-frame img { width: 100%; height: 100%; object-fit: cover; }
+    .viz-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .gen-spinner { text-align: center; }
-    .gen-spinner .spinner { border-color: rgba(45,138,110,0.2); border-top-color: #2d8a6e; width: 32px; height: 32px; margin: 0 auto 10px; }
+    .gen-spinner .spinner { border: 3px solid rgba(45,138,110,0.2); border-top-color: #2d8a6e; width: 32px; height: 32px; margin: 0 auto 10px; border-radius: 50%; animation: spin 0.8s linear infinite; }
     .gen-spinner .label { font-size: 11px; color: #6b8a7e; }
-
     .chat-messages { max-height: 320px; overflow-y: auto; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
     .msg { display: flex; }
     .msg.user { justify-content: flex-end; }
@@ -86,10 +68,8 @@
     .bubble { max-width: 85%; padding: 10px 14px; font-size: 13px; line-height: 1.5; word-wrap: break-word; }
     .msg.user .bubble { border-radius: 14px 14px 4px 14px; background: linear-gradient(135deg, #2d8a6e, #3a9e7e); color: white; }
     .msg.assistant .bubble { border-radius: 14px 14px 14px 4px; background: rgba(0,0,0,0.04); color: #333; }
-
     .quick-actions { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
     .quick-btn { background: rgba(45,138,110,0.06); border: 1px solid rgba(45,138,110,0.15); border-radius: 18px; padding: 5px 12px; font-size: 11px; color: #2d8a6e; font-weight: 500; white-space: nowrap; }
-
     .chat-input-row { display: flex; gap: 8px; align-items: center; }
     .chat-input { flex: 1; padding: 12px 16px; border-radius: 12px; border: 2px solid rgba(0,0,0,0.08); font-size: 14px; outline: none; background: rgba(0,0,0,0.01); transition: border-color 0.2s; }
     .chat-input:focus { border-color: rgba(45,138,110,0.4); }
@@ -98,7 +78,6 @@
   </style>
 </head>
 <body>
-
   <div class="header">
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="logo-icon">✨</div>
@@ -109,16 +88,12 @@
     </div>
     <button class="reset-btn" id="resetBtn" onclick="resetAll()">↺ Odznova</button>
   </div>
-
   <div class="progress">
     <div class="progress-bar active" id="prog1"></div>
     <div class="progress-bar" id="prog2"></div>
     <div class="progress-bar" id="prog3"></div>
   </div>
-
   <div class="container">
-
-    <!-- Step 1 -->
     <div class="card" id="step1">
       <div class="step-header">
         <div class="step-badge">1</div>
@@ -132,27 +107,18 @@
       </div>
       <div class="preview-wrap" id="previewWrap">
         <img id="previewImg" src="" alt="Nahraná fotka" />
-        <div class="preview-overlay" id="previewOverlay">
-          <div class="spinner"></div>
-          <div class="spinner-label">Analyzujem miestnosť...</div>
-        </div>
         <button class="remove-btn" onclick="removeImage()">×</button>
       </div>
       <input type="file" id="fileInput" accept="image/*" style="display:none" />
       <div class="error-msg" id="errorMsg"></div>
     </div>
-
-    <!-- Step 2 -->
     <div class="card animated" id="step2">
       <div class="step-header">
         <div class="step-badge">2</div>
         <span class="step-title">Vybrať štýl</span>
       </div>
-      <div class="room-desc" id="roomDesc"></div>
       <div class="styles-grid" id="stylesGrid"></div>
     </div>
-
-    <!-- Step 3: Viz -->
     <div class="card animated" id="step3-viz">
       <div class="step-header">
         <div class="step-badge">✨</div>
@@ -166,17 +132,15 @@
         <div>
           <div class="viz-label after" id="vizAfterLabel">Po</div>
           <div class="viz-frame after-frame" id="vizAfterFrame">
-            <div class="gen-spinner" id="genSpinner">
+            <div class="gen-spinner" id="genSpinner" style="display:none;">
               <div class="spinner"></div>
-              <div class="label">Generujem...</div>
+              <div class="label">Generujem dizajn...</div>
             </div>
-            <img id="vizAfter" src="" alt="Po" style="display:none;" />
+            <img id="vizAfter" src="" alt="" style="display:none;" />
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Step 3: Chat -->
     <div class="card animated" id="step3-chat">
       <div class="step-header">
         <div class="step-badge">💬</div>
@@ -195,149 +159,63 @@
       </div>
     </div>
   </div>
-
 <script>
-// ============================================
-// KONFIGURÁCIA - API endpoint
-// ============================================
-// Keď beží na vlastnom serveri, volá /api/chat (proxy)
-// Keď beží na Claude.ai, volá priamo Anthropic API
-var API_URL = "/api/chat";
-
-// Detekcia či beží na Claude.ai
-if (window.location.hostname.includes("claude.ai") || window.location.hostname.includes("anthropic")) {
-  API_URL = "https://api.anthropic.com/v1/messages";
-}
-
-function callAI(messages) {
-  return fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      messages: messages
-    })
-  }).then(function(r) { return r.json(); });
-}
-
-// ============================================
-// STATE
-// ============================================
-var currentStep = 1;
-var uploadedImageUrl = null;
-var uploadedBase64 = null;
-var uploadedMediaType = null;
-var selectedStyle = null;
-var roomDescription = "";
-var chatHistory = [];
+var currentStep = 1, uploadedImageUrl = null, selectedStyle = null, chatHistory = [];
 
 var STYLES = [
-  { id: "midcentury", label: "Retro moderný", sublabel: "Mid-Century", emoji: "🛋️", prompt: "mid-century modern retro style with warm wood tones, clean lines, organic curves, iconic furniture pieces" },
-  { id: "scandinavian", label: "Škandinávsky", sublabel: "Nordic", emoji: "🌿", prompt: "scandinavian nordic style with light wood, white walls, minimal decor, cozy hygge atmosphere, natural materials" },
-  { id: "industrial", label: "Industriálny", sublabel: "Industrial", emoji: "🧱", prompt: "industrial loft style with exposed brick, metal pipes, raw concrete, Edison bulbs, dark metal accents" },
-  { id: "bohemian", label: "Bohémsky", sublabel: "Boho", emoji: "🪴", prompt: "bohemian boho style with colorful textiles, macrame, plants everywhere, eclectic mix, warm earthy tones" },
-  { id: "minimal", label: "Minimalistický", sublabel: "Minimal", emoji: "⚪", prompt: "ultra minimalist style with clean white surfaces, hidden storage, very few objects, zen-like simplicity, monochrome" },
-  { id: "farmhouse", label: "Moderný vidiecky", sublabel: "Farmhouse", emoji: "🏡", prompt: "modern farmhouse style with shiplap walls, barn doors, rustic wood beams, vintage accents, cozy textiles" }
+  { id: "midcentury", label: "Retro moderný", sublabel: "Mid-Century", emoji: "🛋️", prompt: "mid-century modern living room warm wood clean lines" },
+  { id: "scandinavian", label: "Škandinávsky", sublabel: "Nordic", emoji: "🌿", prompt: "scandinavian nordic room light wood white walls cozy hygge" },
+  { id: "industrial", label: "Industriálny", sublabel: "Industrial", emoji: "🧱", prompt: "industrial loft exposed brick metal pipes concrete" },
+  { id: "bohemian", label: "Bohémsky", sublabel: "Boho", emoji: "🪴", prompt: "bohemian boho colorful textiles macrame plants eclectic" },
+  { id: "minimal", label: "Minimalistický", sublabel: "Minimal", emoji: "⚪", prompt: "ultra minimalist white clean surfaces zen simplicity" },
+  { id: "farmhouse", label: "Moderný vidiecky", sublabel: "Farmhouse", emoji: "🏡", prompt: "modern farmhouse shiplap walls rustic wood beams cozy" }
 ];
 
-// ============================================
-// INIT
-// ============================================
+// Pollinations text API - zadarmo, bez kľúča
+function callTextAI(prompt) {
+  return fetch("https://text.pollinations.ai/" + encodeURIComponent(prompt))
+    .then(function(r) { return r.text(); });
+}
+
+// Init style buttons
 var grid = document.getElementById("stylesGrid");
 STYLES.forEach(function(style) {
   var btn = document.createElement("button");
-  btn.className = "style-btn disabled";
+  btn.className = "style-btn";
   btn.id = "style-" + style.id;
   btn.innerHTML = '<div class="style-emoji">' + style.emoji + '</div><div class="style-name">' + style.label + '</div><div class="style-sub">' + style.sublabel + '</div>';
   btn.onclick = function() { selectStyle(style); };
   grid.appendChild(btn);
 });
 
-// ============================================
-// FILE HANDLING
-// ============================================
+// File handling
 var fileInput = document.getElementById("fileInput");
 var uploadZone = document.getElementById("uploadZone");
-
-fileInput.addEventListener("change", function(e) {
-  if (e.target.files[0]) handleFile(e.target.files[0]);
-});
+fileInput.addEventListener("change", function(e) { if (e.target.files[0]) handleFile(e.target.files[0]); });
 uploadZone.addEventListener("dragover", function(e) { e.preventDefault(); uploadZone.classList.add("dragover"); });
 uploadZone.addEventListener("dragleave", function() { uploadZone.classList.remove("dragover"); });
-uploadZone.addEventListener("drop", function(e) {
-  e.preventDefault(); uploadZone.classList.remove("dragover");
-  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-});
+uploadZone.addEventListener("drop", function(e) { e.preventDefault(); uploadZone.classList.remove("dragover"); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
 
 function handleFile(file) {
-  var valid = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/svg+xml", "image/webp"];
-  if (valid.indexOf(file.type) === -1) {
-    showError("Nepodporovaný formát. Použite PNG, JPG, SVG alebo GIF.");
-    return;
-  }
+  var valid = ["image/png","image/jpeg","image/jpg","image/gif","image/svg+xml","image/webp"];
+  if (valid.indexOf(file.type) === -1) { showError("Nepodporovaný formát."); return; }
   hideError();
-  uploadedMediaType = file.type;
   uploadedImageUrl = URL.createObjectURL(file);
   document.getElementById("previewImg").src = uploadedImageUrl;
   document.getElementById("uploadZone").style.display = "none";
   document.getElementById("previewWrap").style.display = "block";
   document.getElementById("check1").style.display = "inline";
-
-  var reader = new FileReader();
-  reader.onload = function() {
-    uploadedBase64 = reader.result.split(",")[1];
-    analyzeRoom();
-  };
-  reader.readAsDataURL(file);
+  goToStep(2);
 }
 
 function removeImage() {
-  uploadedImageUrl = null; uploadedBase64 = null; fileInput.value = "";
+  uploadedImageUrl = null; fileInput.value = "";
   document.getElementById("uploadZone").style.display = "block";
   document.getElementById("previewWrap").style.display = "none";
-  document.getElementById("previewOverlay").style.display = "none";
   document.getElementById("check1").style.display = "none";
   goToStep(1);
 }
 
-// ============================================
-// ANALYZE ROOM
-// ============================================
-function analyzeRoom() {
-  document.getElementById("previewOverlay").style.display = "flex";
-  goToStep(2);
-
-  callAI([{
-    role: "user",
-    content: [
-      { type: "image", source: { type: "base64", media_type: uploadedMediaType, data: uploadedBase64 } },
-      { type: "text", text: "Describe this room for interior redesign in max 15 words. Example: 'small living room with dark sofa, TV, wooden floor, beige walls'. Write in English, no full sentences." }
-    ]
-  }])
-  .then(function(data) {
-    var found = (data.content || []).find(function(c) { return c.type === "text"; });
-    roomDescription = found ? found.text : "A modern room with standard furniture and neutral colors.";
-    finishAnalysis();
-  })
-  .catch(function(err) {
-    console.error(err);
-    roomDescription = "A room with furniture, walls, and standard lighting.";
-    finishAnalysis();
-  });
-}
-
-function finishAnalysis() {
-  document.getElementById("previewOverlay").style.display = "none";
-  var descEl = document.getElementById("roomDesc");
-  descEl.textContent = "🔍 " + roomDescription;
-  descEl.style.display = "block";
-  document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("disabled"); });
-}
-
-// ============================================
-// STYLE SELECTION & IMAGE GENERATION
-// ============================================
 function selectStyle(style) {
   selectedStyle = style;
   document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("selected"); });
@@ -347,185 +225,144 @@ function selectStyle(style) {
   generateVisualization(style, "");
 }
 
-function generateVisualization(styleObj, extraPrompt) {
+function generateVisualization(styleObj, extra) {
   goToStep(3);
   document.getElementById("vizBefore").src = uploadedImageUrl;
   document.getElementById("vizAfterLabel").textContent = "Po — " + styleObj.label;
-  document.getElementById("genSpinner").style.display = "block";
-  document.getElementById("genSpinner").innerHTML = '<div class="spinner"></div><div class="label">Generujem dizajn... (môže trvať 15-30s)</div>';
-  document.getElementById("vizAfter").style.display = "none";
+  showSpinner("Generujem dizajn... (15-30s)");
 
-  // Skráť popis miestnosti na max 50 znakov
-  var shortDesc = roomDescription.substring(0, 50).replace(/[^a-zA-Z0-9 ,]/g, "");
-  var prompt = shortDesc + " " + styleObj.id + " style interior design photorealistic";
-  if (extraPrompt) prompt += " " + extraPrompt.substring(0, 40);
-
-  loadPollinationsImage(prompt, 0, styleObj);
+  var prompt = styleObj.prompt + " interior design photorealistic 8k beautiful";
+  if (extra) prompt += " " + extra;
+  loadImage(prompt, styleObj);
 }
 
-function loadPollinationsImage(prompt, attempt, styleObj) {
+function loadImage(prompt, styleObj) {
   var seed = Math.floor(Math.random() * 100000);
-  // Prompt max 200 znakov pre spoľahlivosť
-  var cleanPrompt = prompt.substring(0, 200);
-  var encoded = encodeURIComponent(cleanPrompt);
-  var imageUrl = "https://image.pollinations.ai/prompt/" + encoded + "?width=800&height=600&seed=" + seed + "&nologo=true&model=flux";
+  var url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.substring(0, 150)) + "?width=800&height=600&seed=" + seed + "&nologo=true";
 
-  console.log("Pollinations attempt " + attempt + ": " + imageUrl);
+  var vizAfter = document.getElementById("vizAfter");
+  vizAfter.style.display = "none";
 
-  // Použijeme fetch namiesto Image() - lepšie error handling
-  fetch(imageUrl)
-    .then(function(response) {
-      if (!response.ok) throw new Error("HTTP " + response.status);
-      return response.blob();
-    })
-    .then(function(blob) {
-      var blobUrl = URL.createObjectURL(blob);
-      document.getElementById("genSpinner").style.display = "none";
-      var vizAfter = document.getElementById("vizAfter");
-      vizAfter.src = blobUrl;
-      vizAfter.style.display = "block";
-      if (chatHistory.length === 0 && styleObj) {
-        addMsg("assistant", "Ahoj! Som tvoj AI konzultant interiérového dizajnu. Tvoja miestnosť bola prerobená v štýle \"" + styleObj.label + "\". Môžeš ma požiadať o zmenu farieb, pridanie/odstránenie nábytku alebo o tipy na nákup.");
-      }
-    })
-    .catch(function(err) {
-      console.error("Pollinations error:", err);
-      if (attempt < 2) {
-        // Retry s jednoduchším promptom
-        var simplePrompts = [
-          (styleObj ? styleObj.id : "modern") + " interior design living room beautiful photorealistic",
-          "beautiful modern interior design photorealistic 8k"
-        ];
-        var fallback = simplePrompts[attempt] || simplePrompts[1];
-        setTimeout(function() {
-          loadPollinationsImage(fallback, attempt + 1, styleObj);
-        }, 2000);
-      } else {
-        // Posledná záchrana - priamo nastaviť img src bez fetch
-        var lastUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent("beautiful modern interior design") + "?width=800&height=600&seed=" + Math.floor(Math.random()*99999) + "&nologo=true";
-        var vizAfter = document.getElementById("vizAfter");
-        vizAfter.src = lastUrl;
-        vizAfter.style.display = "block";
-        document.getElementById("genSpinner").style.display = "none";
-      }
-    });
+  // Jednoduchý img load - BEZ crossOrigin, BEZ fetch
+  var img = document.createElement("img");
+  img.onload = function() {
+    vizAfter.src = url;
+    vizAfter.style.display = "block";
+    document.getElementById("genSpinner").style.display = "none";
+    if (chatHistory.length === 0 && styleObj) {
+      addMsg("assistant", "Ahoj! Tvoja miestnosť bola prerobená v štýle \"" + styleObj.label + "\". Môžeš ma požiadať o zmenu farieb, pridanie nábytku alebo tipy na nákup.");
+    }
+  };
+  img.onerror = function() {
+    // Retry s ešte jednoduchším promptom
+    var simple = "https://image.pollinations.ai/prompt/" + encodeURIComponent("beautiful " + (styleObj ? styleObj.id : "modern") + " interior room design") + "?width=800&height=600&seed=" + (seed+1) + "&nologo=true";
+    vizAfter.src = simple;
+    vizAfter.style.display = "block";
+    document.getElementById("genSpinner").style.display = "none";
+  };
+  img.src = url;
 }
 
-// ============================================
-// CHAT
-// ============================================
+function showSpinner(text) {
+  var el = document.getElementById("genSpinner");
+  el.style.display = "block";
+  el.innerHTML = '<div class="spinner"></div><div class="label">' + text + '</div>';
+  document.getElementById("vizAfter").style.display = "none";
+}
+
+// Chat
 function addMsg(role, text) {
   chatHistory.push({ role: role, text: text });
-  var container = document.getElementById("chatMessages");
+  var c = document.getElementById("chatMessages");
   var d = document.createElement("div");
   d.className = "msg " + role;
   d.innerHTML = '<div class="bubble">' + escapeHtml(text) + '</div>';
-  container.appendChild(d);
-  container.scrollTop = container.scrollHeight;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
 }
 
-function escapeHtml(str) {
-  var div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
-}
+function escapeHtml(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
 function removeLastLoading() {
-  var container = document.getElementById("chatMessages");
-  var msgs = container.querySelectorAll(".msg");
-  for (var i = msgs.length - 1; i >= 0; i--) {
-    if (msgs[i].querySelector(".bubble").textContent === "⏳ Spracovávam...") {
-      container.removeChild(msgs[i]);
-      chatHistory.pop();
-      break;
+  var c = document.getElementById("chatMessages");
+  var m = c.querySelectorAll(".msg");
+  for (var i = m.length - 1; i >= 0; i--) {
+    if (m[i].querySelector(".bubble").textContent.indexOf("⏳") === 0) {
+      c.removeChild(m[i]); chatHistory.pop(); break;
     }
   }
 }
 
-function setQuick(text) {
-  document.getElementById("chatInput").value = text;
-  updateSendBtn();
-}
-
+function setQuick(t) { document.getElementById("chatInput").value = t; updateSendBtn(); }
 function updateSendBtn() {
-  var btn = document.getElementById("sendBtn");
-  if (document.getElementById("chatInput").value.trim()) {
-    btn.classList.add("active");
-  } else {
-    btn.classList.remove("active");
-  }
+  var b = document.getElementById("sendBtn");
+  b.classList.toggle("active", !!document.getElementById("chatInput").value.trim());
 }
 
 function sendChat() {
   var input = document.getElementById("chatInput");
-  var userMsg = input.value.trim();
-  if (!userMsg) return;
-
-  addMsg("user", userMsg);
-  input.value = "";
-  updateSendBtn();
+  var msg = input.value.trim();
+  if (!msg) return;
+  addMsg("user", msg);
+  input.value = ""; updateSendBtn();
   addMsg("assistant", "⏳ Spracovávam...");
 
-  callAI([{
-    role: "user",
-    content: "You are an interior design AI assistant. The current room description is: \"" + roomDescription + "\". The current style is: \"" + (selectedStyle ? selectedStyle.prompt : "") + "\". The user asks: \"" + userMsg + "\".\nRespond with EXACTLY this JSON format, nothing else:\n{\"response\": \"your helpful response in Slovak language\", \"prompt_addition\": \"additional english prompt keywords for image generation based on user request\"}"
-  }])
-  .then(function(data) {
-    var found = (data.content || []).find(function(c) { return c.type === "text"; });
-    var text = found ? found.text : "";
-    var parsed;
-    try {
-      parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-    } catch(e) {
-      parsed = { response: "Prepáč, niečo sa pokazilo. Skús to znova.", prompt_addition: "" };
-    }
-    removeLastLoading();
-    addMsg("assistant", parsed.response);
+  var aiPrompt = "Si AI konzultant interieroveho dizajnu. Styl: " + (selectedStyle ? selectedStyle.label : "moderny") + ". Otazka: " + msg + ". Odpovedaj v slovencine, strucne 2-3 vety. Na konci pridaj KEYWORDS: anglicke klucove slova pre obrazok (max 5 slov)";
 
-    if (parsed.prompt_addition && selectedStyle) {
-      document.getElementById("genSpinner").style.display = "block";
-      document.getElementById("genSpinner").innerHTML = '<div class="spinner"></div><div class="label">Generujem dizajn...</div>';
-      document.getElementById("vizAfter").style.display = "none";
-      var shortDesc = roomDescription.substring(0, 50).replace(/[^a-zA-Z0-9 ,]/g, "");
-      var fp = shortDesc + " " + selectedStyle.id + " " + parsed.prompt_addition.substring(0, 40) + " interior photorealistic";
-      loadPollinationsImage(fp, 0, null);
-    }
-  })
-  .catch(function() {
-    removeLastLoading();
-    addMsg("assistant", "Prepáč, nastala chyba. Skús to znova.");
-  });
+  callTextAI(aiPrompt)
+    .then(function(resp) {
+      removeLastLoading();
+      var parts = resp.split("KEYWORDS:");
+      var answer = parts[0].trim();
+      var keywords = parts[1] ? parts[1].trim().substring(0, 50) : "";
+      if (!answer || answer.length < 3) answer = "Upravujem dizajn podľa tvojej požiadavky.";
+      addMsg("assistant", answer);
+      if (keywords && selectedStyle) {
+        showSpinner("Aktualizujem dizajn...");
+        loadImage(selectedStyle.prompt + " " + keywords + " interior photorealistic", null);
+      }
+    })
+    .catch(function() {
+      removeLastLoading();
+      // Offline fallback
+      var kw = { "farb":"colorful walls painted", "stien":"new wall color bright", "rastlin":"indoor plants greenery", "nabyt":"modern furniture", "svetl":"bright warm lighting", "tmav":"dark moody atmosphere", "drev":"wooden accents natural" };
+      var keywords = "", reply = "Skúsim upraviť dizajn podľa tvojej požiadavky.";
+      var lower = msg.toLowerCase();
+
+      if (lower.indexOf("nakup") !== -1 || lower.indexOf("tip") !== -1) {
+        addMsg("assistant", "Pre nákup nábytku odporúčam: IKEA, JYSK, Möbelix, Bonami.sk. Pre dekorácie: H&M Home, Westwing, Pepco.");
+        return;
+      }
+      Object.keys(kw).forEach(function(k) { if (lower.indexOf(k) !== -1) keywords = kw[k]; });
+      addMsg("assistant", reply);
+      if (keywords && selectedStyle) {
+        showSpinner("Aktualizujem dizajn...");
+        loadImage(selectedStyle.prompt + " " + keywords + " interior photorealistic", null);
+      }
+    });
 }
 
-// ============================================
-// NAVIGATION
-// ============================================
 function goToStep(s) {
   currentStep = s;
   document.getElementById("resetBtn").style.display = s > 1 ? "block" : "none";
-  document.getElementById("prog1").className = "progress-bar" + (s >= 1 ? " active" : "");
-  document.getElementById("prog2").className = "progress-bar" + (s >= 2 ? " active" : "");
-  document.getElementById("prog3").className = "progress-bar" + (s >= 3 ? " active" : "");
+  for (var i = 1; i <= 3; i++) document.getElementById("prog" + i).className = "progress-bar" + (s >= i ? " active" : "");
   document.getElementById("step2").style.display = s >= 2 ? "block" : "none";
   document.getElementById("step3-viz").style.display = s >= 3 ? "block" : "none";
   document.getElementById("step3-chat").style.display = s >= 3 ? "block" : "none";
 }
 
 function resetAll() {
-  currentStep = 1; uploadedImageUrl = null; uploadedBase64 = null;
-  selectedStyle = null; roomDescription = ""; chatHistory = []; fileInput.value = "";
+  currentStep = 1; uploadedImageUrl = null; selectedStyle = null; chatHistory = []; fileInput.value = "";
   document.getElementById("uploadZone").style.display = "block";
   document.getElementById("previewWrap").style.display = "none";
-  document.getElementById("previewOverlay").style.display = "none";
   document.getElementById("check1").style.display = "none";
-  document.getElementById("roomDesc").style.display = "none";
   document.getElementById("chatMessages").innerHTML = "";
   document.getElementById("chatInput").value = "";
-  document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("selected"); b.classList.add("disabled"); });
+  document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("selected"); });
   hideError(); goToStep(1);
 }
 
-function showError(msg) { var el = document.getElementById("errorMsg"); el.textContent = msg; el.style.display = "block"; }
+function showError(m) { var e = document.getElementById("errorMsg"); e.textContent = m; e.style.display = "block"; }
 function hideError() { document.getElementById("errorMsg").style.display = "none"; }
 </script>
 </body>
