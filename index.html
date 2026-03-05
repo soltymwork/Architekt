@@ -1,413 +1,306 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#2d8a6e" />
-  <title>AI Konzultant Interiérového Dizajnu</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; min-height: 100dvh; background: linear-gradient(165deg, #f0f7f4 0%, #e8f0ec 30%, #f5f0eb 70%, #faf7f4 100%); }
-    button { font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    button:active { transform: scale(0.97); }
-    input { font-family: inherit; -webkit-appearance: none; }
-    input::placeholder { color: #aaa; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-    .header { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
-    .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #2d8a6e, #4eba8b); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 8px rgba(45,138,110,0.3); }
-    .logo-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #1a2e28; letter-spacing: -0.3px; }
-    .logo-sub { font-size: 10px; color: #6b8a7e; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
-    .reset-btn { background: rgba(45,138,110,0.08); border: 1px solid rgba(45,138,110,0.15); border-radius: 10px; padding: 7px 14px; font-size: 12px; font-weight: 600; color: #2d8a6e; display: none; }
-    .progress { padding: 16px 20px 0; display: flex; gap: 6px; }
-    .progress-bar { flex: 1; height: 3px; border-radius: 2px; background: rgba(0,0,0,0.08); transition: all 0.5s ease; }
-    .progress-bar.active { background: linear-gradient(90deg, #2d8a6e, #4eba8b); }
-    .container { max-width: 680px; margin: 0 auto; padding: 16px 14px 40px; }
-    .card { background: white; border-radius: 20px; padding: 24px 20px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); }
-    .card.animated { animation: fadeUp 0.5s ease; }
-    .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-    .step-badge { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: white; font-weight: 700; flex-shrink: 0; background: linear-gradient(135deg, #2d8a6e, #4eba8b); }
-    .step-title { font-size: 16px; font-weight: 600; color: #1a2e28; }
-    .step-check { font-size: 16px; color: #2d8a6e; display: none; }
-    .upload-zone { border: 2px dashed rgba(0,0,0,0.12); border-radius: 16px; padding: 44px 20px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.01); transition: all 0.3s; }
-    .upload-zone:hover, .upload-zone.dragover { border-color: #2d8a6e; background: rgba(45,138,110,0.04); }
-    .upload-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
-    .upload-text { font-size: 14px; font-weight: 500; color: #444; margin-bottom: 4px; }
-    .upload-hint { font-size: 11px; color: #999; }
-    .preview-wrap { position: relative; border-radius: 16px; overflow: hidden; display: none; }
-    .preview-wrap img { width: 100%; max-height: 260px; object-fit: cover; display: block; border-radius: 16px; }
-    .remove-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 15px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-    .error-msg { color: #d32f2f; font-size: 12px; margin-top: 10px; text-align: center; display: none; }
-    #step2, #step3-viz, #step3-chat { display: none; }
-    .styles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .style-btn { background: rgba(0,0,0,0.015); border: 2px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 18px 10px; text-align: center; transition: all 0.25s ease; }
-    .style-btn.selected { background: linear-gradient(135deg, rgba(45,138,110,0.08), rgba(78,186,139,0.08)); border-color: #2d8a6e; transform: scale(0.97); }
-    .style-emoji { font-size: 26px; margin-bottom: 6px; }
-    .style-name { font-size: 13px; font-weight: 600; color: #1a2e28; }
-    .style-sub { font-size: 10px; color: #999; margin-top: 2px; }
-    .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .viz-label { font-size: 10px; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .viz-label.before { color: #999; }
-    .viz-label.after { color: #2d8a6e; }
-    .viz-frame { border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; background: #f5f5f5; display: flex; align-items: center; justify-content: center; }
-    .viz-frame.after-frame { background: #f0f7f4; }
-    .viz-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .gen-spinner { text-align: center; }
-    .gen-spinner .spinner { border: 3px solid rgba(45,138,110,0.2); border-top-color: #2d8a6e; width: 32px; height: 32px; margin: 0 auto 10px; border-radius: 50%; animation: spin 0.8s linear infinite; }
-    .gen-spinner .label { font-size: 11px; color: #6b8a7e; }
-    .chat-messages { max-height: 320px; overflow-y: auto; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
-    .msg { display: flex; }
-    .msg.user { justify-content: flex-end; }
-    .msg.assistant { justify-content: flex-start; }
-    .bubble { max-width: 85%; padding: 10px 14px; font-size: 13px; line-height: 1.5; word-wrap: break-word; }
-    .msg.user .bubble { border-radius: 14px 14px 4px 14px; background: linear-gradient(135deg, #2d8a6e, #3a9e7e); color: white; }
-    .msg.assistant .bubble { border-radius: 14px 14px 14px 4px; background: rgba(0,0,0,0.04); color: #333; }
-    .quick-actions { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-    .quick-btn { background: rgba(45,138,110,0.06); border: 1px solid rgba(45,138,110,0.15); border-radius: 18px; padding: 5px 12px; font-size: 11px; color: #2d8a6e; font-weight: 500; white-space: nowrap; }
-    .chat-input-row { display: flex; gap: 8px; align-items: center; }
-    .chat-input { flex: 1; padding: 12px 16px; border-radius: 12px; border: 2px solid rgba(0,0,0,0.08); font-size: 14px; outline: none; background: rgba(0,0,0,0.01); transition: border-color 0.2s; }
-    .chat-input:focus { border-color: rgba(45,138,110,0.4); }
-    .send-btn { width: 44px; height: 44px; border-radius: 12px; border: none; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.25s; background: rgba(0,0,0,0.06); color: #999; }
-    .send-btn.active { background: linear-gradient(135deg, #2d8a6e, #4eba8b); color: white; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2d8a6e">
+<title>AI Konzultant - Interiérový Dizajn</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;background:linear-gradient(165deg,#f0f7f4,#e8f0ec 30%,#f5f0eb 70%,#faf7f4)}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input{font-family:inherit;-webkit-appearance:none}
+input::placeholder{color:#aaa}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.hdr{background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);padding:14px 20px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{width:38px;height:38px;background:linear-gradient(135deg,#2d8a6e,#4eba8b);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(45,138,110,.3)}
+.hdr-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#1a2e28}
+.hdr-sub{font-size:10px;color:#6b8a7e;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.btn-reset{background:rgba(45,138,110,.08);border:1px solid rgba(45,138,110,.15);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:600;color:#2d8a6e;display:none}
+
+.bar{padding:16px 20px 0;display:flex;gap:6px}
+.bar div{flex:1;height:3px;border-radius:2px;background:rgba(0,0,0,.08);transition:.5s}
+.bar div.on{background:linear-gradient(90deg,#2d8a6e,#4eba8b)}
+
+.wrap{max-width:680px;margin:0 auto;padding:16px 14px 40px}
+.card{background:#fff;border-radius:20px;padding:24px 20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.05)}
+.card.anim{animation:fadeIn .5s ease}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sb{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700;flex-shrink:0;background:linear-gradient(135deg,#2d8a6e,#4eba8b)}
+.st{font-size:16px;font-weight:600;color:#1a2e28}
+
+.uz{border:2px dashed rgba(0,0,0,.12);border-radius:16px;padding:44px 20px;text-align:center;cursor:pointer;background:rgba(0,0,0,.01);transition:.3s}
+.uz:active{border-color:#2d8a6e;background:rgba(45,138,110,.04)}
+.pw{position:relative;border-radius:16px;overflow:hidden;display:none}
+.pw img{width:100%;max-height:260px;object-fit:cover;display:block;border-radius:16px}
+.pw button{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:15px;display:flex;align-items:center;justify-content:center}
+
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sb2{background:rgba(0,0,0,.015);border:2px solid rgba(0,0,0,.06);border-radius:14px;padding:18px 10px;text-align:center;transition:.25s}
+.sb2.sel{background:linear-gradient(135deg,rgba(45,138,110,.08),rgba(78,186,139,.08));border-color:#2d8a6e;transform:scale(.97)}
+.sb2 .em{font-size:26px;margin-bottom:6px}
+.sb2 .nm{font-size:13px;font-weight:600;color:#1a2e28}
+.sb2 .su{font-size:10px;color:#999;margin-top:2px}
+
+.vg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vl{font-size:10px;font-weight:600;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.vl.b{color:#999}.vl.a{color:#2d8a6e}
+.vf{border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:#f5f5f5;display:flex;align-items:center;justify-content:center}
+.vf.af{background:#f0f7f4}
+.vf img{width:100%;height:100%;object-fit:cover;display:block}
+.sp{text-align:center}
+.sp .dot{border:3px solid rgba(45,138,110,.2);border-top-color:#2d8a6e;width:32px;height:32px;margin:0 auto 10px;border-radius:50%;animation:spin .8s linear infinite}
+.sp .lt{font-size:11px;color:#6b8a7e}
+
+.cm{max-height:320px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:10px}
+.mg{display:flex}
+.mg.u{justify-content:flex-end}
+.mg.a{justify-content:flex-start}
+.bl{max-width:85%;padding:10px 14px;font-size:13px;line-height:1.5;word-wrap:break-word}
+.mg.u .bl{border-radius:14px 14px 4px 14px;background:linear-gradient(135deg,#2d8a6e,#3a9e7e);color:#fff}
+.mg.a .bl{border-radius:14px 14px 14px 4px;background:rgba(0,0,0,.04);color:#333}
+.qa{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.qb{background:rgba(45,138,110,.06);border:1px solid rgba(45,138,110,.15);border-radius:18px;padding:5px 12px;font-size:11px;color:#2d8a6e;font-weight:500;white-space:nowrap}
+.ci{display:flex;gap:8px;align-items:center}
+.ci input{flex:1;padding:12px 16px;border-radius:12px;border:2px solid rgba(0,0,0,.08);font-size:14px;outline:none;background:rgba(0,0,0,.01);transition:.2s}
+.ci input:focus{border-color:rgba(45,138,110,.4)}
+.ci button{width:44px;height:44px;border-radius:12px;border:none;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(0,0,0,.06);color:#999;transition:.25s}
+.ci button.on{background:linear-gradient(135deg,#2d8a6e,#4eba8b);color:#fff}
+.hide{display:none}
+</style>
 </head>
 <body>
-  <div class="header">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="logo-icon">✨</div>
-      <div>
-        <div class="logo-title">AI Konzultant</div>
-        <div class="logo-sub">Interiérový dizajn</div>
-      </div>
-    </div>
-    <button class="reset-btn" id="resetBtn" onclick="resetAll()">↺ Odznova</button>
-  </div>
-  <div class="progress">
-    <div class="progress-bar active" id="prog1"></div>
-    <div class="progress-bar" id="prog2"></div>
-    <div class="progress-bar" id="prog3"></div>
-  </div>
-  <div class="container">
-    <div class="card" id="step1">
-      <div class="step-header">
-        <div class="step-badge">1</div>
-        <span class="step-title">Nahrať fotku</span>
-        <span class="step-check" id="check1">✓</span>
-      </div>
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-        <div class="upload-icon">📸</div>
-        <div class="upload-text">Kliknite alebo potiahnite fotku</div>
-        <div class="upload-hint">PNG, JPG, SVG, GIF, WebP</div>
-      </div>
-      <div class="preview-wrap" id="previewWrap">
-        <img id="previewImg" src="" alt="Nahraná fotka" />
-        <button class="remove-btn" onclick="removeImage()">×</button>
-      </div>
-      <input type="file" id="fileInput" accept="image/*" style="display:none" />
-      <div class="error-msg" id="errorMsg"></div>
-    </div>
-    <div class="card animated" id="step2">
-      <div class="step-header">
-        <div class="step-badge">2</div>
-        <span class="step-title">Vybrať štýl</span>
-      </div>
-      <div class="styles-grid" id="stylesGrid"></div>
-    </div>
-    <div class="card animated" id="step3-viz">
-      <div class="step-header">
-        <div class="step-badge">✨</div>
-        <span class="step-title">Vizualizácia</span>
-      </div>
-      <div class="viz-grid">
-        <div>
-          <div class="viz-label before">Pred</div>
-          <div class="viz-frame"><img id="vizBefore" src="" alt="Pred" /></div>
-        </div>
-        <div>
-          <div class="viz-label after" id="vizAfterLabel">Po</div>
-          <div class="viz-frame after-frame" id="vizAfterFrame">
-            <div class="gen-spinner" id="genSpinner" style="display:none;">
-              <div class="spinner"></div>
-              <div class="label">Generujem dizajn...</div>
-            </div>
-            <img id="vizAfter" src="" alt="" style="display:none;" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card animated" id="step3-chat">
-      <div class="step-header">
-        <div class="step-badge">💬</div>
-        <span class="step-title">Upraviť a nakupovať</span>
-      </div>
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="quick-actions">
-        <button class="quick-btn" onclick="setQuick('Zmeň farbu stien')">Zmeň farbu stien</button>
-        <button class="quick-btn" onclick="setQuick('Pridaj rastliny')">Pridaj rastliny</button>
-        <button class="quick-btn" onclick="setQuick('Modernejší nábytok')">Modernejší nábytok</button>
-        <button class="quick-btn" onclick="setQuick('Tipy na nákup')">Tipy na nákup</button>
-      </div>
-      <div class="chat-input-row">
-        <input class="chat-input" id="chatInput" placeholder="Požiadaj o zmeny alebo tipy..." onkeydown="if(event.key==='Enter')sendChat()" oninput="updateSendBtn()" />
-        <button class="send-btn" id="sendBtn" onclick="sendChat()">➤</button>
-      </div>
-    </div>
-  </div>
-<script>
-var currentStep = 1, uploadedImageUrl = null, selectedStyle = null, chatHistory = [];
 
-var STYLES = [
-  { id: "midcentury", label: "Retro moderný", sublabel: "Mid-Century", emoji: "🛋️", prompt: "mid-century modern living room warm wood clean lines" },
-  { id: "scandinavian", label: "Škandinávsky", sublabel: "Nordic", emoji: "🌿", prompt: "scandinavian nordic room light wood white walls cozy hygge" },
-  { id: "industrial", label: "Industriálny", sublabel: "Industrial", emoji: "🧱", prompt: "industrial loft exposed brick metal pipes concrete" },
-  { id: "bohemian", label: "Bohémsky", sublabel: "Boho", emoji: "🪴", prompt: "bohemian boho colorful textiles macrame plants eclectic" },
-  { id: "minimal", label: "Minimalistický", sublabel: "Minimal", emoji: "⚪", prompt: "ultra minimalist white clean surfaces zen simplicity" },
-  { id: "farmhouse", label: "Moderný vidiecky", sublabel: "Farmhouse", emoji: "🏡", prompt: "modern farmhouse shiplap walls rustic wood beams cozy" }
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="hdr-logo">&#10024;</div>
+    <div><div class="hdr-title">AI Konzultant</div><div class="hdr-sub">Interi&#233;rov&#253; dizajn</div></div>
+  </div>
+  <button class="btn-reset hide" id="btnR" onclick="doReset()">&#8634; Odznova</button>
+</div>
+
+<div class="bar"><div class="on" id="b1"></div><div id="b2"></div><div id="b3"></div></div>
+
+<div class="wrap">
+  <div class="card" id="s1">
+    <div class="sh"><div class="sb">1</div><span class="st">Nahra&#357; fotku</span><span id="chk" class="hide" style="color:#2d8a6e;font-size:16px">&#10003;</span></div>
+    <div class="uz" id="uz" onclick="document.getElementById('fi').click()">
+      <div style="font-size:36px;opacity:.4;margin-bottom:10px">&#128247;</div>
+      <div style="font-size:14px;font-weight:500;color:#444;margin-bottom:4px">Kliknite alebo potiahnite fotku</div>
+      <div style="font-size:11px;color:#999">PNG, JPG, GIF, WebP</div>
+    </div>
+    <div class="pw" id="pw">
+      <img id="pi" src="" alt="">
+      <button onclick="doRemove()">&#215;</button>
+    </div>
+    <input type="file" id="fi" accept="image/*" style="display:none">
+  </div>
+
+  <div class="card anim hide" id="s2">
+    <div class="sh"><div class="sb">2</div><span class="st">Vybra&#357; &#353;t&#253;l</span></div>
+    <div class="sg" id="sg"></div>
+  </div>
+
+  <div class="card anim hide" id="s3v">
+    <div class="sh"><div class="sb">&#10024;</div><span class="st">Vizualiz&#225;cia</span></div>
+    <div class="vg">
+      <div><div class="vl b">PRED</div><div class="vf"><img id="vb" src="" alt=""></div></div>
+      <div><div class="vl a" id="vla">PO</div><div class="vf af" id="vaf"><div class="sp" id="gsp"><div class="dot"></div><div class="lt">Generujem dizajn...</div></div><img id="va" src="" alt="" class="hide"></div></div>
+    </div>
+  </div>
+
+  <div class="card anim hide" id="s3c">
+    <div class="sh"><div class="sb">&#128172;</div><span class="st">Upravi&#357; a nakupova&#357;</span></div>
+    <div class="cm" id="cms"></div>
+    <div class="qa">
+      <button class="qb" onclick="setQ('Zme\u0148 farbu stien')">Zme&#328; farbu stien</button>
+      <button class="qb" onclick="setQ('Pridaj rastliny')">Pridaj rastliny</button>
+      <button class="qb" onclick="setQ('Modernej\u0161\u00ed n\u00e1bytok')">Modernej&#353;&#237; n&#225;bytok</button>
+      <button class="qb" onclick="setQ('Tipy na n\u00e1kup')">Tipy na n&#225;kup</button>
+    </div>
+    <div class="ci">
+      <input id="cin" placeholder="Po&#382;iadaj o zmeny alebo tipy..." onkeydown="if(event.key==='Enter')doSend()" oninput="updBtn()">
+      <button id="sbtn" onclick="doSend()">&#10148;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var imgUrl=null,curStyle=null,hist=[];
+
+var STY=[
+{id:"midcentury",label:"Retro modern\u00fd",sub:"Mid-Century",em:"\uD83D\uDECB\uFE0F",pr:"mid-century modern living room warm wood clean lines"},
+{id:"scandinavian",label:"\u0160kandin\u00e1vsky",sub:"Nordic",em:"\uD83C\uDF3F",pr:"scandinavian nordic room light wood white walls cozy"},
+{id:"industrial",label:"Industri\u00e1lny",sub:"Industrial",em:"\uD83E\uDDF1",pr:"industrial loft exposed brick metal pipes concrete"},
+{id:"bohemian",label:"Boh\u00e9msky",sub:"Boho",em:"\uD83E\uDEB4",pr:"bohemian boho colorful textiles macrame plants eclectic"},
+{id:"minimal",label:"Minimalistick\u00fd",sub:"Minimal",em:"\u26AA",pr:"ultra minimalist white clean surfaces zen simplicity"},
+{id:"farmhouse",label:"Modern\u00fd vidiecky",sub:"Farmhouse",em:"\uD83C\uDFE1",pr:"modern farmhouse shiplap walls rustic wood beams cozy"}
 ];
 
-// Predpísané odpovede v správnej slovenčine
-var RESPONSES = {
-  "farb": {
-    reply: "Skvelý nápad! Zmena farby stien dokáže úplne premeniť atmosféru miestnosti. Pre tento štýl by sa hodili teplé zemité tóny alebo jemné pastelové odtiene. Generujem novú vizualizáciu.",
-    keywords: "colorful painted walls warm tones"
-  },
-  "stien": {
-    reply: "Steny sú základ každého interiéru. Odporúčam zvážiť akcentovú stenu v kontrastnej farbe alebo zaujímavú textúru, napríklad tehlu či drevený obklad. Pozri sa na novú vizualizáciu.",
-    keywords: "accent wall new color texture"
-  },
-  "rastlin": {
-    reply: "Rastliny dodajú každému priestoru život a sviežosť. Odporúčam kombináciu väčšej podlahovej rastliny (napr. fikus alebo monstera) s menšími na poličkách. Aktualizujem vizualizáciu.",
-    keywords: "indoor plants greenery monstera ficus"
-  },
-  "nabyt": {
-    reply: "Modernejší nábytok môže výrazne osviežiť celý priestor. Kľúčové je zvoliť kusy, ktoré spolu ladia materiálom aj farbou. Pripravujem novú vizualizáciu s aktualizovaným nábytkom.",
-    keywords: "modern furniture new sleek design"
-  },
-  "nakup": {
-    reply: "Pre nákup nábytku a doplnkov v tomto štýle odporúčam: IKEA (dostupné základy), JYSK (dobrý pomer cena/kvalita), Möbelix (široký výber), Bonami.sk (dizajnové kúsky) a Westwing (prémiové dekorácie). Pre menšie doplnky sú výborné H&M Home a Zara Home.",
-    keywords: ""
-  },
-  "tip": {
-    reply: "Tu sú moje tipy: 1) Začnite s farbou stien — je to najlacnejšia a najväčšia zmena. 2) Investujte do kvalitného osvetlenia — stojanova lampa dokáže zázraky. 3) Pridajte textílie — vankúše, deka a koberec zjemnia priestor. 4) Menej je viac — zbavte sa zbytočností.",
-    keywords: ""
-  },
-  "svetl": {
-    reply: "Osvetlenie je kľúčové pre atmosféru. Odporúčam kombinovať viacero zdrojov svetla: stropné pre celkové osvetlenie, stojanové alebo stolové lampy pre útulnosť a LED pásiky pre moderný akcent.",
-    keywords: "bright warm lighting lamps cozy"
-  },
-  "tmav": {
-    reply: "Tmavšie tóny dodajú priestoru hĺbku a eleganciu. Skúste tmavú akcentovú stenu v kombinácii s medenými alebo zlatými doplnkami. Dôležité je zachovať dostatok svetla, aby priestor nepôsobil stiesneným dojmom.",
-    keywords: "dark moody elegant atmosphere dramatic"
-  },
-  "drev": {
-    reply: "Drevo vnáša do interiéru teplo a prirodzenosť. Krásne funguje ako drevená podlaha, police alebo jedálenský stôl. Kombinujte svetlé a tmavé odtiene dreva pre zaujímavý kontrast.",
-    keywords: "wooden accents natural wood warm"
-  },
-  "kober": {
-    reply: "Koberec je jednoduchý spôsob, ako definovať zóny v miestnosti a pridať útulnosť. Pre tento štýl odporúčam koberec s jemným vzorom alebo v jednofarebnom prevedení, ktorý ladí s ostatnými textíliami.",
-    keywords: "area rug carpet cozy floor textile"
-  },
-  "polick": {
-    reply: "Otvorené poličky sú skvelé na vystavenie dekorácií a osobných predmetov. Platí pravidlo: kombinujte knihy, rastliny a dekorácie v nepárnych počtoch. Neplňte ich úplne — nechajte priestor dýchať.",
-    keywords: "open shelves books decoration display"
-  },
-  "default": {
-    reply: "Dobrý nápad! Skúsim upraviť vizualizáciu podľa tvojej požiadavky. Ak chceš konkrétnejšie zmeny, skús napísať napríklad „zmeň farbu stien", „pridaj rastliny" alebo „modernejší nábytok".",
-    keywords: "improved redesigned beautiful modern"
-  }
+var RESP={
+farb:{t:"Skvel\u00fd n\u00e1pad! Zmena farby stien dok\u00e1\u017ee \u00faplne premeni\u0165 atmosf\u00e9ru miestnosti. Pre tento \u0161t\u00fdl by sa hodili tepl\u00e9 zemit\u00e9 t\u00f3ny alebo jemn\u00e9 pastelov\u00e9 odtiene.",k:"colorful painted walls warm tones"},
+stien:{t:"Steny s\u00fa z\u00e1klad ka\u017ed\u00e9ho interi\u00e9ru. Odpor\u00fa\u010dam zv\u00e1\u017ei\u0165 akcentov\u00fa stenu v kontrastnej farbe alebo zauj\u00edmav\u00fa text\u00faru, napr\u00edklad tehlu \u010di dreven\u00fd obklad.",k:"accent wall new color texture"},
+rastlin:{t:"Rastliny dodaj\u00fa ka\u017ed\u00e9mu priestoru \u017eivot a svie\u017eos\u0165. Odpor\u00fa\u010dam kombin\u00e1ciu v\u00e4\u010d\u0161ej podlahovej rastliny s men\u0161\u00edmi na poli\u010dk\u00e1ch.",k:"indoor plants greenery monstera ficus"},
+nabyt:{t:"Modernej\u0161\u00ed n\u00e1bytok m\u00f4\u017ee v\u00fdrazne osviezi\u0165 cel\u00fd priestor. K\u013e\u00fa\u010dov\u00e9 je zvoli\u0165 kusy, ktor\u00e9 spolu ladia materi\u00e1lom aj farbou.",k:"modern furniture new sleek design"},
+nakup:{t:"Pre n\u00e1kup n\u00e1bytku odpor\u00fa\u010dam: IKEA, JYSK, M\u00f6belix, Bonami.sk. Pre dekor\u00e1cie: H&M Home, Westwing a Zara Home.",k:""},
+tip:{t:"Moje tipy: 1) Za\u010dnite s farbou stien \u2013 najlacnej\u0161ia a najv\u00e4\u010d\u0161ia zmena. 2) Investujte do kvalitného osvetlenia. 3) Pridajte text\u00edlie \u2013 vank\u00fa\u0161e, deku a koberec. 4) Menej je viac.",k:""},
+svetl:{t:"Osvetlenie je k\u013e\u00fa\u010dov\u00e9 pre atmosf\u00e9ru. Odpor\u00fa\u010dam kombinova\u0165 viacero zdrojov: stropn\u00e9, stojanov\u00e9 lampy a LED p\u00e1siky pre modern\u00fd akcent.",k:"bright warm lighting lamps cozy"},
+drev:{t:"Drevo vn\u00e1\u0161a do interi\u00e9ru teplo a prirodzenos\u0165. Kr\u00e1sne funguje ako podlaha, police alebo jed\u00e1lensk\u00fd st\u00f4l.",k:"wooden accents natural wood warm"},
+kober:{t:"Koberec je jednoduch\u00fd sp\u00f4sob, ako prida\u0165 \u00fatulnos\u0165. Odpor\u00fa\u010dam koberec s jemn\u00fdm vzorom alebo jednofarebný, ktor\u00fd lad\u00ed s ostatn\u00fdmi text\u00edliami.",k:"area rug carpet cozy floor textile"}
 };
 
-// Init style buttons
-var grid = document.getElementById("stylesGrid");
-STYLES.forEach(function(style) {
-  var btn = document.createElement("button");
-  btn.className = "style-btn";
-  btn.id = "style-" + style.id;
-  btn.innerHTML = '<div class="style-emoji">' + style.emoji + '</div><div class="style-name">' + style.label + '</div><div class="style-sub">' + style.sublabel + '</div>';
-  btn.onclick = function() { selectStyle(style); };
-  grid.appendChild(btn);
-});
-
-// File handling
-var fileInput = document.getElementById("fileInput");
-var uploadZone = document.getElementById("uploadZone");
-fileInput.addEventListener("change", function(e) { if (e.target.files[0]) handleFile(e.target.files[0]); });
-uploadZone.addEventListener("dragover", function(e) { e.preventDefault(); uploadZone.classList.add("dragover"); });
-uploadZone.addEventListener("dragleave", function() { uploadZone.classList.remove("dragover"); });
-uploadZone.addEventListener("drop", function(e) { e.preventDefault(); uploadZone.classList.remove("dragover"); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
-
-function handleFile(file) {
-  var valid = ["image/png","image/jpeg","image/jpg","image/gif","image/svg+xml","image/webp"];
-  if (valid.indexOf(file.type) === -1) { showError("Nepodporovaný formát."); return; }
-  hideError();
-  uploadedImageUrl = URL.createObjectURL(file);
-  document.getElementById("previewImg").src = uploadedImageUrl;
-  document.getElementById("uploadZone").style.display = "none";
-  document.getElementById("previewWrap").style.display = "block";
-  document.getElementById("check1").style.display = "inline";
-  goToStep(2);
+// Build style buttons
+var sg=document.getElementById("sg");
+for(var i=0;i<STY.length;i++){
+  (function(s){
+    var b=document.createElement("button");
+    b.className="sb2";
+    b.id="st-"+s.id;
+    b.innerHTML='<div class="em">'+s.em+'</div><div class="nm">'+s.label+'</div><div class="su">'+s.sub+'</div>';
+    b.onclick=function(){pickStyle(s)};
+    sg.appendChild(b);
+  })(STY[i]);
 }
 
-function removeImage() {
-  uploadedImageUrl = null; fileInput.value = "";
-  document.getElementById("uploadZone").style.display = "block";
-  document.getElementById("previewWrap").style.display = "none";
-  document.getElementById("check1").style.display = "none";
-  goToStep(1);
+// File input
+var fi=document.getElementById("fi");
+fi.onchange=function(e){if(e.target.files[0])loadFile(e.target.files[0])};
+
+function loadFile(f){
+  var ok=["image/png","image/jpeg","image/gif","image/webp"];
+  if(ok.indexOf(f.type)<0 && f.type.indexOf("image/")<0)return;
+  imgUrl=URL.createObjectURL(f);
+  document.getElementById("pi").src=imgUrl;
+  document.getElementById("uz").style.display="none";
+  document.getElementById("pw").style.display="block";
+  document.getElementById("chk").className="";
+  step(2);
 }
 
-function selectStyle(style) {
-  selectedStyle = style;
-  document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("selected"); });
-  document.getElementById("style-" + style.id).classList.add("selected");
-  chatHistory = [];
-  document.getElementById("chatMessages").innerHTML = "";
-  generateVisualization(style, "");
+function doRemove(){
+  imgUrl=null;fi.value="";
+  document.getElementById("uz").style.display="";
+  document.getElementById("pw").style.display="none";
+  document.getElementById("chk").className="hide";
+  step(1);
 }
 
-function generateVisualization(styleObj, extra) {
-  goToStep(3);
-  document.getElementById("vizBefore").src = uploadedImageUrl;
-  document.getElementById("vizAfterLabel").textContent = "Po — " + styleObj.label;
-  showSpinner("Generujem dizajn... (15-30s)");
-
-  var prompt = styleObj.prompt + " interior design photorealistic 8k";
-  if (extra) prompt += " " + extra;
-  loadImage(prompt, styleObj);
+function pickStyle(s){
+  curStyle=s;hist=[];
+  document.getElementById("cms").innerHTML="";
+  var all=document.querySelectorAll(".sb2");
+  for(var i=0;i<all.length;i++)all[i].className="sb2";
+  document.getElementById("st-"+s.id).className="sb2 sel";
+  genViz(s,"");
 }
 
-function loadImage(prompt, styleObj) {
-  var seed = Math.floor(Math.random() * 100000);
-  var clean = prompt.substring(0, 150);
-  var url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(clean) + "?width=800&height=600&seed=" + seed + "&nologo=true";
+function genViz(s,extra){
+  step(3);
+  document.getElementById("vb").src=imgUrl;
+  document.getElementById("vla").textContent="PO \u2014 "+s.label.toUpperCase();
+  document.getElementById("gsp").style.display="block";
+  document.getElementById("va").className="hide";
 
-  console.log("Loading:", url);
+  var p=s.pr+" interior design photorealistic 8k";
+  if(extra)p+=" "+extra;
+  loadImg(p,s);
+}
 
-  // Priamo nastavíme src na vizAfter element
-  var vizAfter = document.getElementById("vizAfter");
-
-  // Najprv nastavíme event handlery
-  vizAfter.onload = function() {
-    console.log("Image loaded OK");
-    vizAfter.style.display = "block";
-    document.getElementById("genSpinner").style.display = "none";
-    vizAfter.onload = null;
-    vizAfter.onerror = null;
-    if (chatHistory.length === 0 && styleObj) {
-      addMsg("assistant", "Ahoj! Tvoja miestnosť bola prerobená v štýle \"" + styleObj.label + "\". Môžeš ma požiadať o zmenu farieb, pridanie nábytku alebo tipy na nákup.");
+function loadImg(prompt,sObj){
+  var seed=Math.floor(Math.random()*99999);
+  var url="https://image.pollinations.ai/prompt/"+encodeURIComponent(prompt.substring(0,150))+"?width=800&height=600&seed="+seed+"&nologo=true";
+  var va=document.getElementById("va");
+  va.onload=function(){
+    va.className="";
+    document.getElementById("gsp").style.display="none";
+    va.onload=null;va.onerror=null;
+    if(hist.length===0 && sObj){
+      addM("a","Ahoj! Tvoja miestnos\u0165 bola preroben\u00e1 v \u0161t\u00fdle \u201e"+sObj.label+"\u201c. M\u00f4\u017ee\u0161 ma po\u017eiada\u0165 o zmenu farieb, pridanie n\u00e1bytku alebo tipy na n\u00e1kup.");
     }
   };
-  vizAfter.onerror = function() {
-    console.log("Image error, trying fallback");
-    vizAfter.onload = function() {
-      vizAfter.style.display = "block";
-      document.getElementById("genSpinner").style.display = "none";
-      vizAfter.onload = null;
-      vizAfter.onerror = null;
-    };
-    vizAfter.onerror = function() {
-      document.getElementById("genSpinner").style.display = "none";
-      vizAfter.onload = null;
-      vizAfter.onerror = null;
-    };
-    var seed2 = Math.floor(Math.random() * 100000);
-    vizAfter.src = "https://image.pollinations.ai/prompt/" + encodeURIComponent("beautiful " + (styleObj ? styleObj.id : "modern") + " interior room") + "?width=800&height=600&seed=" + seed2 + "&nologo=true";
+  va.onerror=function(){
+    var s2=Math.floor(Math.random()*99999);
+    var u2="https://image.pollinations.ai/prompt/"+encodeURIComponent("beautiful "+(sObj?sObj.id:"modern")+" interior room")+"?width=800&height=600&seed="+s2+"&nologo=true";
+    va.onload=function(){va.className="";document.getElementById("gsp").style.display="none";va.onload=null;va.onerror=null};
+    va.onerror=function(){document.getElementById("gsp").style.display="none";va.onerror=null};
+    va.src=u2;
   };
-
-  // Potom nastavíme src - to spustí loading
-  vizAfter.style.display = "none";
-  vizAfter.src = url;
+  va.src=url;
 }
 
-function showSpinner(text) {
-  var el = document.getElementById("genSpinner");
-  el.style.display = "block";
-  el.innerHTML = '<div class="spinner"></div><div class="label">' + text + '</div>';
-  document.getElementById("vizAfter").style.display = "none";
-}
-
-// Chat
-function addMsg(role, text) {
-  chatHistory.push({ role: role, text: text });
-  var c = document.getElementById("chatMessages");
-  var d = document.createElement("div");
-  d.className = "msg " + role;
-  d.innerHTML = '<div class="bubble">' + escapeHtml(text) + '</div>';
+function addM(r,t){
+  hist.push({r:r,t:t});
+  var c=document.getElementById("cms");
+  var d=document.createElement("div");
+  d.className="mg "+(r==="u"?"u":"a");
+  var b=document.createElement("div");
+  b.className="bl";
+  b.textContent=t;
+  d.appendChild(b);
   c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
+  c.scrollTop=c.scrollHeight;
 }
 
-function escapeHtml(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
-
-function setQuick(t) { document.getElementById("chatInput").value = t; updateSendBtn(); }
-function updateSendBtn() {
-  var b = document.getElementById("sendBtn");
-  b.classList.toggle("active", !!document.getElementById("chatInput").value.trim());
+function setQ(t){document.getElementById("cin").value=t;updBtn()}
+function updBtn(){
+  var b=document.getElementById("sbtn");
+  b.className=document.getElementById("cin").value.trim()?"on":"";
 }
 
-function sendChat() {
-  var input = document.getElementById("chatInput");
-  var msg = input.value.trim();
-  if (!msg) return;
-  addMsg("user", msg);
-  input.value = ""; updateSendBtn();
+function doSend(){
+  var inp=document.getElementById("cin");
+  var msg=inp.value.trim();
+  if(!msg)return;
+  addM("u",msg);
+  inp.value="";updBtn();
 
-  // Nájdi najlepšiu odpoveď podľa kľúčových slov
-  var lower = msg.toLowerCase();
-  var matched = null;
-
-  var keys = Object.keys(RESPONSES);
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    if (key !== "default" && lower.indexOf(key) !== -1) {
-      matched = RESPONSES[key];
-      break;
-    }
+  var low=msg.toLowerCase();
+  var match=null;
+  var keys=["farb","stien","rastlin","nabyt","nakup","tip","svetl","drev","kober"];
+  for(var i=0;i<keys.length;i++){
+    if(low.indexOf(keys[i])>=0){match=RESP[keys[i]];break}
+  }
+  if(!match){
+    match={
+      t:"Dobr\u00fd n\u00e1pad! Sk\u00fasim upravi\u0165 vizualiz\u00e1ciu pod\u013ea tvojej po\u017eiadavky. Sk\u00fas nap\u00edsa\u0165 napr\u00edklad \u201ezme\u0148 farbu stien\u201c, \u201epridaj rastliny\u201c alebo \u201etipy na n\u00e1kup\u201c.",
+      k:"improved redesigned beautiful"
+    };
   }
 
-  if (!matched) matched = RESPONSES["default"];
-
-  addMsg("assistant", matched.reply);
-
-  // Ak sú kľúčové slová, pregeneruj obrázok
-  if (matched.keywords && selectedStyle) {
-    showSpinner("Aktualizujem dizajn...");
-    var prompt = selectedStyle.prompt + " " + matched.keywords + " interior photorealistic";
-    loadImage(prompt, null);
+  addM("a",match.t);
+  if(match.k && curStyle){
+    document.getElementById("gsp").style.display="block";
+    document.getElementById("va").className="hide";
+    loadImg(curStyle.pr+" "+match.k+" interior photorealistic",null);
   }
 }
 
-// Navigation
-function goToStep(s) {
-  currentStep = s;
-  document.getElementById("resetBtn").style.display = s > 1 ? "block" : "none";
-  for (var i = 1; i <= 3; i++) document.getElementById("prog" + i).className = "progress-bar" + (s >= i ? " active" : "");
-  document.getElementById("step2").style.display = s >= 2 ? "block" : "none";
-  document.getElementById("step3-viz").style.display = s >= 3 ? "block" : "none";
-  document.getElementById("step3-chat").style.display = s >= 3 ? "block" : "none";
+function step(n){
+  document.getElementById("btnR").style.display=n>1?"block":"none";
+  document.getElementById("b1").className=n>=1?"on":"";
+  document.getElementById("b2").className=n>=2?"on":"";
+  document.getElementById("b3").className=n>=3?"on":"";
+  document.getElementById("s2").className=n>=2?"card anim":"card anim hide";
+  document.getElementById("s3v").className=n>=3?"card anim":"card anim hide";
+  document.getElementById("s3c").className=n>=3?"card anim":"card anim hide";
 }
 
-function resetAll() {
-  currentStep = 1; uploadedImageUrl = null; selectedStyle = null; chatHistory = []; fileInput.value = "";
-  document.getElementById("uploadZone").style.display = "block";
-  document.getElementById("previewWrap").style.display = "none";
-  document.getElementById("check1").style.display = "none";
-  document.getElementById("chatMessages").innerHTML = "";
-  document.getElementById("chatInput").value = "";
-  document.getElementById("vizAfter").onload = null;
-  document.getElementById("vizAfter").onerror = null;
-  document.querySelectorAll(".style-btn").forEach(function(b) { b.classList.remove("selected"); });
-  hideError(); goToStep(1);
+function doReset(){
+  imgUrl=null;curStyle=null;hist=[];fi.value="";
+  document.getElementById("uz").style.display="";
+  document.getElementById("pw").style.display="none";
+  document.getElementById("chk").className="hide";
+  document.getElementById("cms").innerHTML="";
+  document.getElementById("cin").value="";
+  document.getElementById("va").onload=null;
+  document.getElementById("va").onerror=null;
+  var all=document.querySelectorAll(".sb2");
+  for(var i=0;i<all.length;i++)all[i].className="sb2";
+  step(1);
 }
-
-function showError(m) { var e = document.getElementById("errorMsg"); e.textContent = m; e.style.display = "block"; }
-function hideError() { document.getElementById("errorMsg").style.display = "none"; }
 </script>
 </body>
 </html>
